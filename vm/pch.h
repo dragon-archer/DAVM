@@ -16,7 +16,6 @@
 #include <common/log.h>
 #include <common/type.h>
 
-#include <string>
 #include <vector>
 
 #endif // _DAVM_VM_PCH_H_

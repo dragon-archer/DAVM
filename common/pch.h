@@ -16,6 +16,7 @@
 // Headers
 #include <cassert>
 #include <cstdint>
+#include <string>
 
 // Namespace
 #ifndef NO_DA_NAMESPACE
