@@ -11,6 +11,7 @@
 #define _DAVM_COMMON_ASM_H_
 
 #include <common/pch.h>
+#include <common/log.h>
 #include <common/type.h>
 
 BEGIN_DA_NAMESPACE
@@ -18,7 +19,38 @@ BEGIN_DA_NAMESPACE
 // Error handling
 
 inline void asm_error_v(vm_context_t& context) noexcept {
-	DAVM_PC(context) = 0; // Hlt the PC
+	fmt::print(fmt::emphasis::bold | fmt::fg(fmt::color::red),
+			   "From asm_error_v:\n"
+			   "ERROR: This function should not be called!\n");
+	print_registers(context);
+	DAVM_PC(context) = 0; // Halt the PC
+}
+
+inline void asm_error_r1(vm_context_t& context, regid_t rd) noexcept {
+	fmt::print(fmt::emphasis::bold | fmt::fg(fmt::color::red),
+			   "From asm_error_r1 (with rd = {}):\n"
+			   "ERROR: This function should not be called!\n",
+			   rd);
+	print_registers(context);
+	DAVM_PC(context) = 0; // Halt the PC
+}
+
+inline void asm_error_r3(vm_context_t& context, regid_t rd, regid_t ra, regid_t rb) noexcept {
+	fmt::print(fmt::emphasis::bold | fmt::fg(fmt::color::red),
+			   "From asm_error_r3 (with rd = {}, ra = {}, rb = {}):\n"
+			   "ERROR: This function should not be called!\n",
+			   rd, ra, rb);
+	print_registers(context);
+	DAVM_PC(context) = 0; // Halt the PC
+}
+
+inline void asm_error_r2i1(vm_context_t& context, regid_t rd, regid_t ra, immediate_t imm) noexcept {
+	fmt::print(fmt::emphasis::bold | fmt::fg(fmt::color::red),
+			   "From asm_error_r3 (with rd = {}, ra = {}, imm = {}):\n"
+			   "ERROR: This function should not be called!\n",
+			   rd, ra, imm);
+	print_registers(context);
+	DAVM_PC(context) = 0; // Halt the PC
 }
 
 // Asm functions
@@ -45,7 +77,7 @@ inline void asm_pop(vm_context_t& context, regid_t rd) noexcept {
 // PUSHQ	rip
 // PUSHQ	rbp
 // MOVQ		rbp, rsp
-// MOVQ		rip, target
+// MOVQ		rip, [target]
 inline void asm_call(vm_context_t& context, regid_t target) noexcept {
 	DAVM_SP(context) -= sizeof(register_t) * 2;
 	*DAVM_CAST(register_t*, DAVM_SP(context) + sizeof(register_t)) = DAVM_PC(context);
@@ -222,16 +254,30 @@ inline void asm_sd(vm_context_t& context, regid_t rd, regid_t ra, immediate_t of
 
 // Function tables
 // Use [[maybe_unused]] attribute to avoid warning
+// Pad with asm_error_* to reduce compare when use
 
 [[maybe_unused]] static constexpr asm_func_v_t asm_table_v[] = {
 	asm_ret,
 	asm_hlt,
+
+	asm_error_v,
+	asm_error_v,
+	asm_error_v,
+	asm_error_v,
+	asm_error_v,
+	asm_error_v,
 };
 
 [[maybe_unused]] static constexpr asm_func_r1_t asm_table_r1[] = {
 	asm_push,
 	asm_pop,
 	asm_call,
+
+	asm_error_r1,
+	asm_error_r1,
+	asm_error_r1,
+	asm_error_r1,
+	asm_error_r1,
 };
 
 [[maybe_unused]] static constexpr asm_func_r3_t asm_table_arith[] = {
@@ -256,6 +302,21 @@ inline void asm_sd(vm_context_t& context, regid_t rd, regid_t ra, immediate_t of
 	asm_and,
 	asm_or,
 	asm_xor,
+
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
+	asm_error_r3,
 };
 
 [[maybe_unused]] static constexpr asm_func_r2i1_t asm_table_sl[] = {
@@ -278,12 +339,16 @@ inline void asm_sd(vm_context_t& context, regid_t rd, regid_t ra, immediate_t of
 	asm_andi,
 	asm_ori,
 	asm_xori,
+
+	asm_error_r2i1,
 };
 
 [[maybe_unused]] static constexpr asm_func_r2i1_t asm_table_imm_shift[] = {
 	asm_slli,
 	asm_srli,
 	asm_srai,
+
+	asm_error_r2i1,
 };
 
 END_DA_NAMESPACE

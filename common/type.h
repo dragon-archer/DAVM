@@ -77,7 +77,6 @@ enum inst_arith_t {
 	I_AND,
 	I_OR,
 	I_XOR,
-	CNT_I_ARITH
 };
 
 enum inst_sl_t {
@@ -106,7 +105,6 @@ enum inst_imm_shift_t {
 	I_SLLI,
 	I_SRLI,
 	I_SRAI,
-	CNT_I_IMM_SHIFT,
 };
 
 struct vm_context_t {
