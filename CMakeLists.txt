@@ -23,6 +23,7 @@ set(COMMON_SRC
 	common/base64.h
 	common/log.h
 	common/pch.h
+	common/reflect.h
 	common/type.h
 )
 set(DAVM_SRC

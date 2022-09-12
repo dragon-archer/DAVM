@@ -16,6 +16,7 @@
 // Headers
 #include <cassert>
 #include <cstdint>
+#include <map>
 #include <string>
 
 // Namespace
