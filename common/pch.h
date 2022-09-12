@@ -87,6 +87,7 @@
 	END_DA_NAMESPACE
 #elif DA_HAS_INCLUDE(<fmt/format.h>) // Then try to use system installed / user specified
 	#define FMT_HEADER_ONLY
+	#define FMT_STATIC_THOUSANDS_SEPARATOR // Avoid include <locale>
 	#include <fmt/format.h>
 	#include <fmt/color.h>
 	BEGIN_DA_NAMESPACE
@@ -94,6 +95,7 @@
 	END_DA_NAMESPACE
 #elif DA_HAS_INCLUDE(<thirdparty/fmt/include/fmt/format.h>) // Otherwise try to directly use fmtlib
 	#define FMT_HEADER_ONLY
+	#define FMT_STATIC_THOUSANDS_SEPARATOR // Avoid include <locale>
 	#include <thirdparty/fmt/include/fmt/format.h>
 	#include <thirdparty/fmt/include/fmt/color.h>
 	BEGIN_DA_NAMESPACE
