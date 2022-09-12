@@ -145,6 +145,52 @@ using asm_func_r2_t	  = void (*)(vm_context_t&, regid_t, regid_t) noexcept;
 using asm_func_r3_t	  = void (*)(vm_context_t&, regid_t, regid_t, regid_t) noexcept;
 using asm_func_r2i1_t = void (*)(vm_context_t&, regid_t, regid_t, immediate_t) noexcept;
 
+struct asm_cmd_v_t {
+	uint32_t op2 : 3;
+	uint32_t op : 4;
+	uint32_t unused : 25;
+};
+
+struct asm_cmd_r1_t {
+	uint32_t op2 : 3;
+	uint32_t op : 4;
+	uint32_t rd : 5;
+	uint32_t unused : 20;
+};
+
+struct asm_cmd_r2_t {
+	uint32_t op : 7;
+	uint32_t rd : 5;
+	uint32_t ra : 5;
+	uint32_t unused : 15;
+};
+
+struct asm_cmd_r3_t {
+	uint32_t op : 7;
+	uint32_t rd : 5;
+	uint32_t ra : 5;
+	uint32_t rb : 5;
+	uint32_t op2 : 5;
+	uint32_t unused : 5;
+};
+
+struct asm_cmd_r2i1_t {
+	uint32_t op : 7;
+	uint32_t rd : 5;
+	uint32_t ra : 5;
+	uint32_t op2 : 3;
+	uint32_t imm : 12;
+};
+
+struct asm_cmd_imm_shift_t {
+	uint32_t op : 7;
+	uint32_t rd : 5;
+	uint32_t ra : 5;
+	uint32_t op2 : 3;
+	uint32_t op3 : 2;
+	uint32_t imm : 10;
+};
+
 END_DA_NAMESPACE
 
 #endif // _DAVM_COMMON_TYPE_H_
