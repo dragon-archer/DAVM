@@ -11,8 +11,10 @@
 #define _DAVM_VM_PCH_H_
 
 #include <common/pch.h>
-#include <common/type.h>
+
 #include <common/asm.h>
+#include <common/log.h>
+#include <common/type.h>
 
 #include <string>
 #include <vector>
