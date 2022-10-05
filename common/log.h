@@ -30,18 +30,9 @@ enum loglevel {
 #endif
 
 inline void print_registers(vm_context_t& context) {
-	std::string s = "Special registers:\n";
-	s += fmt::format("PC  : {0:#018X}\t", DAVM_PC(context));
-	s += fmt::format("RA  : {0:#018X}\t", DAVM_RA(context));
-	s += fmt::format("BP  : {0:#018X}\t", DAVM_BP(context));
-	s += fmt::format("SP  : {0:#018X}\n", DAVM_SP(context));
-	s += fmt::format("GP  : {0:#018X}\t", DAVM_GP(context));
-	s += fmt::format("TP  : {0:#018X}\t", DAVM_TP(context));
-	s += fmt::format("CP  : {0:#018X}\t", DAVM_CP(context));
-	s += fmt::format("RV  : {0:#018X}\n", DAVM_RV(context));
-	s += fmt::format("Normal registers:\n");
-	for(int i = 8; i < 32; ++i) {
-		s += fmt::format("X{0:02} : {1:#018X}", i, context.x[i]);
+	std::string s = "Registers:\n";
+	for(int i = 0; i < 32; ++i) {
+		s += fmt::format("{0:<3} : {1:#018X}", reg_name[i], context.x[i]);
 		s += ((i + 1) & 0b11) ? '\t' : '\n';
 	}
 	// Buffer the output
@@ -56,9 +47,14 @@ inline std::string dissemble_command(uint32_t code) {
 		ret += fmt::format("{0}\t{1}, {2}, {3}\n", asm_name_arith[cmd.op2], reg_name[cmd.rd], reg_name[cmd.ra], reg_name[cmd.rb]);
 		break;
 	}
-	case I_G_SL: {
+	case I_G_LOAD: {
 		const asm_cmd_r2i1_t cmd = *DAVM_CAST(asm_cmd_r2i1_t*, &code);
-		ret += fmt::format("{0}\t{1}, {2}, {3}\n", asm_name_sl[cmd.op2], reg_name[cmd.rd], reg_name[cmd.ra], cmd.imm);
+		ret += fmt::format("{0}\t{1}, {2}, {3}\n", asm_name_load[cmd.op2], reg_name[cmd.rd], reg_name[cmd.ra], cmd.imm);
+		break;
+	}
+	case I_G_SAVE: {
+		const asm_cmd_r2i1_t cmd = *DAVM_CAST(asm_cmd_r2i1_t*, &code);
+		ret += fmt::format("{0}\t{1}, {2}, {3}\n", asm_name_save[cmd.op2], reg_name[cmd.rd], reg_name[cmd.ra], cmd.imm);
 		break;
 	}
 	case I_G_IMM: {

@@ -17,7 +17,7 @@ BEGIN_DA_NAMESPACE
 
 // Enum value to string
 
-[[maybe_unused]] static constexpr const char* reg_name[] = {
+DA_MAYBE_UNUSED static constexpr const char* reg_name[] = {
 	"PC",
 	"RA",
 	"BP",
@@ -52,9 +52,10 @@ BEGIN_DA_NAMESPACE
 	"ZR",
 };
 
-[[maybe_unused]] static constexpr const char* asm_name_v[] = {
-	"RET",
-	"HLT",
+#define DA_X(name, ...) #name,
+
+DA_MAYBE_UNUSED static constexpr const char* asm_name_v[] = {
+	DA_X_V
 
 	"ERROR VOID COMMAND",
 	"ERROR VOID COMMAND",
@@ -64,10 +65,8 @@ BEGIN_DA_NAMESPACE
 	"ERROR VOID COMMAND",
 };
 
-[[maybe_unused]] static constexpr const char* asm_name_r1[] = {
-	"PUSH",
-	"POP",
-	"CALL",
+DA_MAYBE_UNUSED static constexpr const char* asm_name_r1[] = {
+	DA_X_R1
 
 	"ERROR R1 COMMAND",
 	"ERROR R1 COMMAND",
@@ -76,25 +75,30 @@ BEGIN_DA_NAMESPACE
 	"ERROR R1 COMMAND",
 };
 
-[[maybe_unused]] static constexpr const char* asm_name_arith[] = {
-	"ADD",
-	"SUB",
-	"SLT",
-	"SLTU",
-	"MUL",
-	"MULH",
-	"MULHSU",
-	"MULHU",
-	"DIV",
-	"DIVU",
-	"REM",
-	"REMU",
-	"SLL",
-	"SRL",
-	"SRA",
-	"AND",
-	"OR",
-	"XOR",
+DA_MAYBE_UNUSED static constexpr const char* asm_name_r2[] = {
+	DA_X_R2
+
+	"ERROR R2 COMMAND",
+	"ERROR R2 COMMAND",
+	"ERROR R2 COMMAND",
+	"ERROR R2 COMMAND",
+	"ERROR R2 COMMAND",
+	"ERROR R2 COMMAND",
+	"ERROR R2 COMMAND",
+};
+
+DA_MAYBE_UNUSED static constexpr const char* asm_name_r2i1[] = {
+	DA_X_R1I1
+
+	"ERROR R2I1 COMMAND",
+	"ERROR R2I1 COMMAND",
+	"ERROR R2I1 COMMAND",
+	"ERROR R2I1 COMMAND",
+	"ERROR R2I1 COMMAND",
+};
+
+DA_MAYBE_UNUSED static constexpr const char* asm_name_arith[] = {
+	DA_X_ARITH
 
 	"ERROR ARITH COMMAND",
 	"ERROR ARITH COMMAND",
@@ -112,38 +116,52 @@ BEGIN_DA_NAMESPACE
 	"ERROR ARITH COMMAND",
 };
 
-[[maybe_unused]] static constexpr const char* asm_name_sl[] = {
-	"LB",
-	"LH",
-	"LW",
-	"LD",
-	"SB",
-	"SH",
-	"SW",
-	"SD",
+DA_MAYBE_UNUSED static constexpr const char* asm_name_load[] = {
+	DA_X_LOAD
+
+	"ERROR LOAD COMMAND"
 };
 
-[[maybe_unused]] static constexpr const char* asm_name_imm[] = {
-	"ADDI",
-	"MULI",
-	"SLTI",
-	"SLTUI",
-	"ANDI",
-	"ORI",
-	"XORI",
+DA_MAYBE_UNUSED static constexpr const char* asm_name_save[] = {
+	DA_X_SAVE
+
+	"ERROR SAVE COMMAND",
+	"ERROR SAVE COMMAND",
+	"ERROR SAVE COMMAND",
+	"ERROR SAVE COMMAND",
+};
+
+DA_MAYBE_UNUSED static constexpr const char* asm_name_imm[] = {
+	DA_X_IMM
 
 	"ERROR IMM COMMAND",
 };
 
-[[maybe_unused]] static constexpr const char* asm_name_imm_shift[] = {
-	"SLLI",
-	"SRLI",
-	"SRAI",
+DA_MAYBE_UNUSED static constexpr const char* asm_name_imm_shift[] = {
+	DA_X_IMM_SHIFT
 
 	"ERROR IMM SHIFT COMMAND",
 };
 
+#undef DA_X
+#define DA_X(name, type, ...) { #name, type << 16 | I_##name },
+
 // String to enum value
+DA_MAYBE_UNUSED static const std::map<std::string, uint32_t> asm_id = {
+	// clang-format off
+	DA_X_V
+	DA_X_R1
+	DA_X_R2
+	DA_X_R1I1
+	DA_X_ARITH
+	DA_X_LOAD
+	DA_X_SAVE
+	DA_X_IMM
+	DA_X_IMM_SHIFT
+	// clang-format on
+};
+
+#undef DA_X
 
 END_DA_NAMESPACE
 

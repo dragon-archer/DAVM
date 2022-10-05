@@ -43,9 +43,14 @@ int VM::one_step() noexcept {
 		asm_table_arith[cmd.op2](m_context, cmd.rd, cmd.ra, cmd.rb);
 		return 0;
 	}
-	case I_G_SL: {
+	case I_G_LOAD: {
 		const asm_cmd_r2i1_t cmd = *DAVM_CAST(asm_cmd_r2i1_t*, &code);
-		asm_table_sl[cmd.op2](m_context, cmd.rd, cmd.ra, cmd.imm);
+		asm_table_load[cmd.op2](m_context, cmd.rd, cmd.ra, cmd.imm);
+		return 0;
+	}
+	case I_G_SAVE: {
+		const asm_cmd_r2i1_t cmd = *DAVM_CAST(asm_cmd_r2i1_t*, &code);
+		asm_table_save[cmd.op2](m_context, cmd.rd, cmd.ra, cmd.imm);
 		return 0;
 	}
 	case I_G_IMM: {

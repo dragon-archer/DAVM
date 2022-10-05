@@ -35,6 +35,16 @@
 	#endif
 #endif
 
+// Detect C++ compiler
+#ifdef _MSC_VER
+#elif defined(__clang__)
+	#define DA_CLANG 1
+	#define DA_COMP_CLANG 1
+	#define DA_COMP_GNU 1
+#elif defined(__GNUC__)
+	#define DA_COMP_GNU 1
+#endif
+
 // Detect C++ version
 // TODO: Add MSVC support
 #if __cplusplus < 201703L
@@ -76,6 +86,20 @@
 #else
 	#define DA_IF_LIKELY(x)   if(x)
 	#define DA_IF_UNLIKELY(x) if(x)
+#endif
+
+#if DA_HAS_CPP_ATTRIBUTE(always_inline)
+	#define DA_ALWAYS_INLINE [[always_inline]] inline
+#elif DA_HAS_CPP_ATTRIBUTE(gnu::always_inline)
+	#define DA_ALWAYS_INLINE [[gnu::always_inline]] inline
+#else
+	#define DA_ALWAYS_INLINE inline
+#endif
+
+#if DA_HAS_CPP_ATTRIBUTE(maybe_unused)
+	#define DA_MAYBE_UNUSED [[maybe_unused]]
+#else
+	#define DA_MAYBE_UNUSED
 #endif
 
 // Conditional headers
